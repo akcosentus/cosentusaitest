@@ -50,6 +50,7 @@
 .message {
   margin-bottom: 1rem;
   display: flex;
+  width: 100%;
   animation: slideIn 0.3s ease-out;
 }
 
@@ -78,20 +79,19 @@
   border-radius: 18px;
   word-wrap: break-word;
   word-break: break-word;
+  display: inline-block;
 }
 
 .userMessage .messageContent {
   background: linear-gradient(135deg, #87CEEB 0%, #4A90E2 100%);
   color: white;
   border-bottom-right-radius: 4px;
-  margin-left: auto;
 }
 
 .assistantMessage .messageContent {
   background: #f1f5f9;
   color: #1a202c;
   border-bottom-left-radius: 4px;
-  margin-right: auto;
 }
 
 .messageContent p {
