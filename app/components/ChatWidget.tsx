@@ -41,6 +41,44 @@ export default function ChatWidget() {
     scrollToBottom()
   }, [messages])
 
+  // Simple markdown parser
+  const parseMarkdown = (text: string) => {
+    let html = text
+    
+    // Code blocks (```code```)
+    html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+    
+    // Inline code (`code`)
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>')
+    
+    // Bold (**text** or __text__)
+    html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    html = html.replace(/__([^_]+)__/g, '<strong>$1</strong>')
+    
+    // Italic (*text* or _text_)
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    html = html.replace(/_([^_]+)_/g, '<em>$1</em>')
+    
+    // Links [text](url)
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    
+    // Line breaks
+    html = html.replace(/\n\n/g, '</p><p>')
+    html = html.replace(/\n/g, '<br/>')
+    
+    // Bullet lists
+    html = html.replace(/^\* (.+)$/gm, '<li>$1</li>')
+    html = html.replace(/(<li>[\s\S]*<\/li>)/g, '<ul>$1</ul>')
+    
+    // Numbered lists
+    html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    
+    // Blockquotes
+    html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    
+    return html
+  }
+
   // Initialize Cosentus Chat Assistant
   useEffect(() => {
     const initializeChat = () => {
@@ -167,9 +205,12 @@ export default function ChatWidget() {
                   message.sender === 'user' ? styles.userMessage : styles.assistantMessage
                 }`}
               >
-                <div className={styles.messageContent}>
-                  <p>{message.text}</p>
-                </div>
+                <div 
+                  className={styles.messageContent}
+                  dangerouslySetInnerHTML={{ 
+                    __html: `<p>${parseMarkdown(message.text)}</p>` 
+                  }}
+                />
               </div>
             ))}
             {loading && (
