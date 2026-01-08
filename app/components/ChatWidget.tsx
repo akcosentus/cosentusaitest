@@ -15,6 +15,11 @@ declare global {
   interface Window {
     CosentusVoice?: {
       createChatAssistant: () => any
+      configure: (options: {
+        chatInitEndpoint?: string
+        chatSendEndpoint?: string
+        apiEndpoint?: string
+      }) => void
     }
   }
 }
@@ -41,6 +46,12 @@ export default function ChatWidget() {
     const initializeChat = () => {
       if (window.CosentusVoice) {
         try {
+          // Configure SDK to use Cosentus API endpoints
+          window.CosentusVoice.configure({
+            chatInitEndpoint: 'https://cosentusai.vercel.app/api/assist-chat',
+            chatSendEndpoint: 'https://cosentusai.vercel.app/api/chat/send-message'
+          })
+          
           const chat = window.CosentusVoice.createChatAssistant()
           
           // Listen for AI responses
