@@ -80,6 +80,7 @@
   word-wrap: break-word;
   word-break: break-word;
   display: inline-block;
+  text-align: left;
 }
 
 .userMessage .messageContent {

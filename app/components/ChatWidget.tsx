@@ -62,11 +62,7 @@ export default function ChatWidget() {
     // Links [text](url)
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
     
-    // Line breaks
-    html = html.replace(/\n\n/g, '</p><p>')
-    html = html.replace(/\n/g, '<br/>')
-    
-    // Bullet lists
+    // Bullet lists (process before line breaks)
     html = html.replace(/^\* (.+)$/gm, '<li>$1</li>')
     html = html.replace(/(<li>[\s\S]*<\/li>)/g, '<ul>$1</ul>')
     
@@ -75,6 +71,15 @@ export default function ChatWidget() {
     
     // Blockquotes
     html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    
+    // Line breaks and paragraphs
+    html = html.replace(/\n\n/g, '</p><p>')
+    html = html.replace(/\n/g, '<br/>')
+    
+    // Wrap in paragraph if not already wrapped
+    if (!html.startsWith('<')) {
+      html = '<p>' + html + '</p>'
+    }
     
     return html
   }
@@ -208,7 +213,7 @@ export default function ChatWidget() {
                 <div 
                   className={styles.messageContent}
                   dangerouslySetInnerHTML={{ 
-                    __html: `<p>${parseMarkdown(message.text)}</p>` 
+                    __html: parseMarkdown(message.text)
                   }}
                 />
               </div>
