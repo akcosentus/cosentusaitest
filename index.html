@@ -27,24 +27,8 @@
       border: none;
     }
     .voice-agents {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-    }
-    .agent-iframe {
-      width: 100%;
-      height: 600px;
-      border: none;
-    }
-    @media (max-width: 1024px) {
-      .voice-agents {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (max-width: 768px) {
-      .voice-agents {
-        grid-template-columns: 1fr;
-      }
+      max-width: 1200px;
+      margin: 0 auto;
     }
   </style>
 </head>
@@ -60,69 +44,11 @@
     </div>
     
     <div class="voice-agents">
-      <!-- Row 1: Cindy - Chris - Cassidy -->
       <iframe 
-        class="agent-iframe"
-        src="https://cosentusai.vercel.app/embed/voice/cindy" 
-        frameborder="0"
-        allow="microphone"
-        allowfullscreen
-      ></iframe>
-      
-      <iframe 
-        class="agent-iframe"
-        src="https://cosentusai.vercel.app/embed/voice/chris" 
-        frameborder="0"
-        allow="microphone"
-        allowfullscreen
-      ></iframe>
-      
-      <iframe 
-        class="agent-iframe"
-        src="https://cosentusai.vercel.app/embed/voice/cassidy" 
-        frameborder="0"
-        allow="microphone"
-        allowfullscreen
-      ></iframe>
-      
-      <!-- Row 2: Courtney - Chloe - Cara -->
-      <iframe 
-        class="agent-iframe"
-        src="https://cosentusai.vercel.app/embed/voice/courtney" 
-        frameborder="0"
-        allow="microphone"
-        allowfullscreen
-      ></iframe>
-      
-      <iframe 
-        class="agent-iframe"
-        src="https://cosentusai.vercel.app/embed/voice/chloe" 
-        frameborder="0"
-        allow="microphone"
-        allowfullscreen
-      ></iframe>
-      
-      <iframe 
-        class="agent-iframe"
-        src="https://cosentusai.vercel.app/embed/voice/cara" 
-        frameborder="0"
-        allow="microphone"
-        allowfullscreen
-      ></iframe>
-      
-      <!-- Row 3: Carly - Carson (centered) -->
-      <iframe 
-        class="agent-iframe"
-        src="https://cosentusai.vercel.app/embed/voice/carly" 
-        frameborder="0"
-        allow="microphone"
-        allowfullscreen
-      ></iframe>
-      
-      <iframe 
-        class="agent-iframe"
-        src="https://cosentusai.vercel.app/embed/voice/carson" 
-        frameborder="0"
+        src="https://cosentusai.vercel.app/embed/voice/all" 
+        width="100%" 
+        height="800px"
+        style="border: none;"
         allow="microphone"
         allowfullscreen
       ></iframe>
