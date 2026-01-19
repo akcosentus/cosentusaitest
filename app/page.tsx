@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import ChatWidget from './components/ChatWidget'
+import VoiceAgents from './components/VoiceAgents'
 import styles from './page.module.css'
 
 export default function Home() {
@@ -11,14 +11,14 @@ export default function Home() {
         <div className={styles.navContent}>
           <div className={styles.logo}>Cosentus</div>
           <div className={styles.navLinks}>
-            <a href="#solutions">Solutions</a>
+            <a href="#chat">AI Chat</a>
+            <a href="#voice-agents">Voice Agents</a>
             <a href="#about">About</a>
-            <a href="#contact">Contact</a>
           </div>
         </div>
       </nav>
 
-      <section className={styles.hero}>
+      <section className={styles.hero} id="chat">
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
             Streamline Your Revenue Cycle Management
@@ -50,6 +50,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <div id="voice-agents">
+        <VoiceAgents />
+      </div>
 
       <footer className={styles.footer}>
         <p>&copy; 2026 Cosentus. All rights reserved.</p>
