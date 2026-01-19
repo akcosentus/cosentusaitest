@@ -10,26 +10,10 @@ interface Message {
   timestamp: Date
 }
 
-// Extend Window interface to include CosentusVoice
-declare global {
-  interface Window {
-    CosentusVoice?: {
-      createChatAssistant: () => any
-      configure: (options: {
-        chatInitEndpoint?: string
-        chatSendEndpoint?: string
-        apiEndpoint?: string
-      }) => void
-    }
-  }
-}
-
 export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isExpanded, setIsExpanded] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [chatAssistant, setChatAssistant] = useState<any>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -41,118 +25,8 @@ export default function ChatWidget() {
     scrollToBottom()
   }, [messages])
 
-  // Simple markdown parser
-  const parseMarkdown = (text: string) => {
-    let html = text
-    
-    // Code blocks (```code```)
-    html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
-    
-    // Inline code (`code`)
-    html = html.replace(/`([^`]+)`/g, '<code>$1</code>')
-    
-    // Bold (**text** or __text__)
-    html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    html = html.replace(/__([^_]+)__/g, '<strong>$1</strong>')
-    
-    // Italic (*text* or _text_)
-    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    html = html.replace(/_([^_]+)_/g, '<em>$1</em>')
-    
-    // Links [text](url)
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-    
-    // Bullet lists (process before line breaks)
-    html = html.replace(/^\* (.+)$/gm, '<li>$1</li>')
-    html = html.replace(/(<li>[\s\S]*<\/li>)/g, '<ul>$1</ul>')
-    
-    // Numbered lists
-    html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-    
-    // Blockquotes
-    html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
-    
-    // Line breaks and paragraphs
-    html = html.replace(/\n\n/g, '</p><p>')
-    html = html.replace(/\n/g, '<br/>')
-    
-    // Wrap in paragraph if not already wrapped
-    if (!html.startsWith('<')) {
-      html = '<p>' + html + '</p>'
-    }
-    
-    return html
-  }
-
-  // Initialize Cosentus Chat Assistant
-  useEffect(() => {
-    const initializeChat = () => {
-      if (window.CosentusVoice) {
-        try {
-          // Configure SDK to use Cosentus API endpoints
-          window.CosentusVoice.configure({
-            chatInitEndpoint: 'https://cosentusai.vercel.app/api/assist-chat',
-            chatSendEndpoint: 'https://cosentusai.vercel.app/api/chat/send-message'
-          })
-          
-          const chat = window.CosentusVoice.createChatAssistant()
-          
-          // Listen for AI responses
-          chat.on('message', (data: { content: string; messageId: string }) => {
-            const assistantMessage: Message = {
-              id: data.messageId,
-              text: data.content,
-              sender: 'assistant',
-              timestamp: new Date()
-            }
-            setMessages(prev => [...prev, assistantMessage])
-          })
-
-          // Listen for loading state
-          chat.on('loading', (data: { isLoading: boolean }) => {
-            setLoading(data.isLoading)
-          })
-
-          // Listen for errors
-          chat.on('error', (data: { error: string }) => {
-            console.error('Chat error:', data.error)
-            const errorMessage: Message = {
-              id: Date.now().toString(),
-              text: `Sorry, I encountered an error: ${data.error}. Please try again.`,
-              sender: 'assistant',
-              timestamp: new Date()
-            }
-            setMessages(prev => [...prev, errorMessage])
-          })
-
-          setChatAssistant(chat)
-        } catch (error) {
-          console.error('Failed to initialize chat assistant:', error)
-        }
-      }
-    }
-
-    // Check if SDK is already loaded
-    if (window.CosentusVoice) {
-      initializeChat()
-    } else {
-      // Wait for SDK to load
-      const checkInterval = setInterval(() => {
-        if (window.CosentusVoice) {
-          initializeChat()
-          clearInterval(checkInterval)
-        }
-      }, 100)
-
-      // Cleanup interval after 10 seconds
-      setTimeout(() => clearInterval(checkInterval), 10000)
-
-      return () => clearInterval(checkInterval)
-    }
-  }, [])
-
-  const handleSend = async () => {
-    if (inputValue.trim() === '' || !chatAssistant || loading) return
+  const handleSend = () => {
+    if (inputValue.trim() === '') return
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -162,39 +36,29 @@ export default function ChatWidget() {
     }
 
     setMessages(prev => [...prev, userMessage])
-    const messageToSend = inputValue
     setInputValue('')
     
     if (!isExpanded) {
       setIsExpanded(true)
     }
 
-    // Send message to Cosentus AI
-    try {
-      await chatAssistant.sendMessage(messageToSend)
-    } catch (error) {
-      console.error('Failed to send message:', error)
-      const errorMessage: Message = {
+    // TODO: Replace with iframe communication
+    // Placeholder response for now
+    setTimeout(() => {
+      const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "Sorry, I'm having trouble connecting right now. Please try again in a moment.",
+        text: "Chat will be implemented via iframe",
         sender: 'assistant',
         timestamp: new Date()
       }
-      setMessages(prev => [...prev, errorMessage])
-    }
+      setMessages(prev => [...prev, assistantMessage])
+    }, 1000)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSend()
-    }
-  }
-
-  const handleInputFocus = () => {
-    if (messages.length === 0) {
-      // Don't expand on focus if no messages yet
-      return
     }
   }
 
@@ -210,25 +74,11 @@ export default function ChatWidget() {
                   message.sender === 'user' ? styles.userMessage : styles.assistantMessage
                 }`}
               >
-                <div 
-                  className={styles.messageContent}
-                  dangerouslySetInnerHTML={{ 
-                    __html: parseMarkdown(message.text)
-                  }}
-                />
-              </div>
-            ))}
-            {loading && (
-              <div className={styles.message}>
-                <div className={`${styles.messageContent} ${styles.loadingMessage}`}>
-                  <div className={styles.typingIndicator}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
+                <div className={styles.messageContent}>
+                  <p>{message.text}</p>
                 </div>
               </div>
-            )}
+            ))}
             <div ref={messagesEndRef} />
           </div>
         )}
@@ -238,24 +88,15 @@ export default function ChatWidget() {
             ref={inputRef}
             type="text"
             className={styles.input}
-            placeholder={
-              !chatAssistant 
-                ? "Connecting to chat assistant..." 
-                : loading 
-                ? "AI is thinking..." 
-                : "Ask me anything about RCM solutions..."
-            }
+            placeholder="Ask me anything about RCM solutions..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
-            onFocus={handleInputFocus}
-            disabled={loading || !chatAssistant}
           />
           <button
             className={styles.sendButton}
             onClick={handleSend}
-            disabled={inputValue.trim() === '' || loading || !chatAssistant}
-            title={!chatAssistant ? 'Connecting to chat assistant...' : 'Send message'}
+            disabled={inputValue.trim() === ''}
           >
             <svg
               width="20"
@@ -276,4 +117,3 @@ export default function ChatWidget() {
     </div>
   )
 }
-

@@ -13,9 +13,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <script src="https://cosentusai.vercel.app/cosentus-voice.js" async></script>
-      </head>
       <body>{children}</body>
     </html>
   )
