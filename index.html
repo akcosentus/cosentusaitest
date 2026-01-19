@@ -9,23 +9,105 @@
       margin: 0;
       padding: 0;
       background-color: #001f3f;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .chat-section {
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      margin-bottom: 60px;
     }
-    iframe {
+    .chat-iframe {
       max-width: 1200px;
       width: 100%;
       height: 800px;
+      border: none;
+    }
+    .voice-agents {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    .agent-iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    @media (max-width: 1024px) {
+      .voice-agents {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .voice-agents {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <iframe 
-    src="https://cosentusai.vercel.app/embed/chat" 
-    frameborder="0"
-    allowfullscreen
-  ></iframe>
+  <div class="container">
+    <div class="chat-section">
+      <iframe 
+        class="chat-iframe"
+        src="https://cosentusai.vercel.app/embed/chat" 
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+    </div>
+    
+    <div class="voice-agents">
+      <iframe 
+        class="agent-iframe"
+        src="https://cosentusai.vercel.app/embed/voice/chloe" 
+        frameborder="0"
+        allow="microphone"
+        allowfullscreen
+      ></iframe>
+      
+      <iframe 
+        class="agent-iframe"
+        src="https://cosentusai.vercel.app/embed/voice/cindy" 
+        frameborder="0"
+        allow="microphone"
+        allowfullscreen
+      ></iframe>
+      
+      <iframe 
+        class="agent-iframe"
+        src="https://cosentusai.vercel.app/embed/voice/chris" 
+        frameborder="0"
+        allow="microphone"
+        allowfullscreen
+      ></iframe>
+      
+      <iframe 
+        class="agent-iframe"
+        src="https://cosentusai.vercel.app/embed/voice/cara" 
+        frameborder="0"
+        allow="microphone"
+        allowfullscreen
+      ></iframe>
+      
+      <iframe 
+        class="agent-iframe"
+        src="https://cosentusai.vercel.app/embed/voice/carly" 
+        frameborder="0"
+        allow="microphone"
+        allowfullscreen
+      ></iframe>
+      
+      <iframe 
+        class="agent-iframe"
+        src="https://cosentusai.vercel.app/embed/voice/carson" 
+        frameborder="0"
+        allow="microphone"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
 </body>
 </html>
