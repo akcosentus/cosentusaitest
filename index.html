@@ -15,43 +15,21 @@
       margin: 0 auto;
       padding: 40px 20px;
     }
-    .chat-section {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 60px;
-    }
-    .chat-iframe {
-      max-width: 1200px;
+    .combined-embed {
       width: 100%;
-      height: 800px;
+      height: 1300px;
       border: none;
-    }
-    .voice-agents {
-      max-width: 1200px;
-      margin: 0 auto;
+      display: block;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="chat-section">
-      <iframe 
-        class="chat-iframe"
-        src="https://cosentusai.vercel.app/embed/chat?v=2" 
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
-    </div>
-    
-    <div class="voice-agents">
-      <iframe 
-        src="https://cosentusai.vercel.app/embed/voice/all-v2" 
-        width="100%" 
-        height="700" 
-        style="border: none;" 
-        allow="microphone https://cosentusai.vercel.app"
-      ></iframe>
-    </div>
+    <iframe
+      class="combined-embed"
+      src="https://cosentusai.vercel.app/embed/combined"
+      allow="microphone"
+    ></iframe>
   </div>
 </body>
 </html>
